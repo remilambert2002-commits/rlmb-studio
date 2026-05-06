@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RLMB Studio — Creative & Marketing Agency</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Shade&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --orange: #FF4D00;
+      --black: #080808;
+      --gray1: #141414;
+      --gray2: #1A1A1A;
+      --white: #F2EDE6;
+      --muted: #555555;
+      --border: #222222;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+```
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+@media (pointer: fine) {
+  body { cursor: none; }
+}
+
+/* CURSOR — desktop only */
+.cursor, .cursor-ring { display: none; }
+@media (pointer: fine) {
+  .cursor {
+    display: block;
+    width: 12px; height: 12px;
+    background: var(--orange);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    transition: transform 0.1s ease;
+  }
+  .cursor-ring {
+    display: block;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(255,77,0,0.5);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99998;
+    transition: transform 0.15s ease, width 0.2s, height 0.2s, opacity 0.2s;
+  }
+  .cursor.hover { transform: scale(2.5); }
+  .cursor-ring.hover { width: 60px; height: 60px; opacity: 0.3; }
+}
+
+/* KONAMI OVERLAY */
+.konami-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 100000;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+.konami-overlay.active { display: flex; }
+.konami-overlay h2 { font-family: 'Bungee', sans-serif; font-size: clamp(2rem,6vw,5rem); color: var(--orange); }
+.konami-overlay p { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--muted); margin-top: 1rem; }
+.konami-overlay .hint { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); margin-top: 2rem; letter-spacing: 0.2em; }
+.konami-close {
+  margin-top: 2rem;
+  background: none; border: 1px solid var(--muted);
+  color: var(--white); font-family: 'Space Mono', monospace;
+  font-size: 0.75rem; padding: 0.6rem 1.4rem;
+  cursor: none; letter-spacing: 0.1em;
+  transition: border-color 0.2s, color 0.2s;
+}
+.konami-close:hover { border-color: var(--orange); color: var(--orange); }
+
+/* MINI GAME */
+.minigame-btn {
+  position: fixed;
+  bottom: 2rem; right: 2rem;
+  width: 52px; height: 52px;
+  background: var(--gray1);
+  border: 1px solid var(--border);
+  color: var(--orange);
+  font-family: 'Bungee', sans-serif;
+  font-size: 1.2rem;
+  cursor: none;
+  z-index: 9000;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+.minigame-btn:hover { background: var(--gray2); border-color: var(--orange); }
+.minigame-panel {
+  display: none;
+  position: fixed;
+  bottom: 6rem; right: 2rem;
+  width: 280px;
+  background: var(--gray1);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  z-index: 9000;
+  font-family: 'Space Mono', monospace;
+}
+.minigame-panel.active { display: block; }
+.minigame-panel h4 { font-family: 'Bungee', sans-serif; font-size: 0.9rem; color: var(--orange); margin-bottom: 0.5rem; }
+.minigame-panel p { font-size: 0.65rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.5; }
+.minigame-score { font-size: 2.5rem; color: var(--white); margin-bottom: 0.5rem; }
+.minigame-record { font-size: 0.65rem; color: var(--muted); margin-bottom: 1rem; }
+.minigame-start {
+  background: var(--orange); color: var(--black);
+  border: none; font-family: 'Bungee', sans-serif;
+  font-size: 0.8rem; padding: 0.6rem 1.2rem;
+  cursor: none; letter-spacing: 0.05em;
+  transition: opacity 0.2s;
+}
+.minigame-start:hover { opacity: 0.85; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 2.5rem;
+  background: rgba(8,8,8,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Bungee', sans-serif;
+  font-size: 1.1rem;
+  color: var(--white);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  cursor: none;
+}
+.nav-logo span { color: var(--orange); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  cursor: none;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--orange);
+  text-decoration: none;
+  border: 1px solid var(--orange);
+  padding: 0.5rem 1.1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background 0.2s, color 0.2s;
+  cursor: none;
+}
+.nav-cta:hover { background: var(--orange); color: var(--black); }
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg-letter {
+  position: absolute;
+  font-family: 'Bungee', sans-serif;
+  font-size: clamp(18rem, 40vw, 36rem);
+  color: rgba(255,77,0,0.03);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -0.05em;
+}
+.hero-phase {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--orange);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.2s forwards;
+}
+.hero-title {
+  font-family: 'Bungee', sans-serif;
+  font-size: clamp(3.5rem, 10vw, 9rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.4s forwards;
+}
+.hero-title .line2 { color: var(--orange); }
+.hero-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.6s forwards;
+}
+.hero-btns {
+  display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.8s forwards;
+}
+.btn-primary {
+  background: var(--orange); color: var(--black);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.9rem 2rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: opacity 0.2s;
+  cursor: none;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-outline {
+  background: none; color: var(--white);
+  border: 1px solid var(--border);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.9rem 2rem;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+  cursor: none;
+}
+.btn-outline:hover { border-color: var(--white); }
+.scroll-indicator {
+  position: absolute; bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem; color: var(--muted);
+  letter-spacing: 0.2em; text-transform: uppercase;
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  animation: fadeUp 0.7s ease 1.2s forwards; opacity: 0;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--orange), transparent);
+  animation: scrollPulse 1.5s ease-in-out infinite;
+}
+
+/* MARQUEE */
+.marquee-section {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  padding: 1rem 0;
+  background: var(--gray1);
+}
+.marquee-track {
+  display: flex; gap: 3rem;
+  width: max-content;
+  animation: marqueeScroll 30s linear infinite;
+}
+.marquee-item {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 3rem;
+}
+.marquee-item::after {
+  content: '◼';
+  color: var(--orange);
+  font-size: 0.5rem;
+}
+
+/* SECTION BASE */
+section { padding: 6rem 2.5rem; }
+.section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--orange);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: 'Bungee', sans-serif;
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  margin-bottom: 3rem;
+}
+
+/* SERVICES */
+#services { background: var(--black); max-width: 1200px; margin: 0 auto; }
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--border);
+}
+.service-card {
+  padding: 2rem;
+  background: var(--gray1);
+  border: none;
+  transition: background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.service-card:hover { background: var(--gray2); }
+.service-card:hover .service-icon { color: var(--orange); }
+.service-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  margin-bottom: 1.2rem;
+}
+.service-icon {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s;
+  color: var(--muted);
+}
+.service-card h3 {
+  font-family: 'Bungee', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.8rem;
+}
+.service-card p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.service-link {
+  display: inline-block;
+  margin-top: 1.2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--orange);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  cursor: none;
+}
+
+/* WORK */
+#work {
+  background: var(--gray1);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.work-inner { max-width: 1200px; margin: 0 auto; }
+.work-note {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 3rem;
+  border-left: 2px solid var(--orange);
+  padding-left: 1rem;
+}
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--border);
+}
+.work-card {
+  background: var(--gray2);
+  overflow: hidden;
+  position: relative;
+  transition: background 0.2s;
+}
+.work-card:hover { background: #1f1f1f; }
+.work-img {
+  width: 100%; aspect-ratio: 4/3;
+  background: var(--black);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.work-img-placeholder {
+  font-family: 'Bungee', sans-serif;
+  font-size: clamp(4rem, 8vw, 7rem);
+  color: rgba(255,77,0,0.08);
+  user-select: none;
+}
+.work-img-label {
+  position: absolute;
+  bottom: 1rem; left: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  background: rgba(8,8,8,0.7);
+  padding: 0.3rem 0.6rem;
+  letter-spacing: 0.1em;
+}
+/* Image upload zone */
+.work-img input[type="file"] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: none;
+  width: 100%; height: 100%;
+  z-index: 10;
+}
+.work-img:hover .upload-hint { opacity: 1; }
+.upload-hint {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,77,0,0.08);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 0.4rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.upload-hint span {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--orange);
+  letter-spacing: 0.15em;
+}
+.work-info { padding: 1.5rem; }
+.work-tags {
+  display: flex; gap: 0.5rem; flex-wrap: wrap;
+  margin-bottom: 0.8rem;
+}
+.work-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.work-tag.accent { border-color: var(--orange); color: var(--orange); }
+.work-card h3 {
+  font-family: 'Bungee', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+}
+.work-card p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+}
+.work-btn {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--white);
+  border: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: border-color 0.2s, color 0.2s;
+  cursor: none;
+}
+.work-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+/* ABOUT */
+#about { max-width: 1100px; margin: 0 auto; }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+.about-text p {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+.about-text p strong { color: var(--white); font-weight: 500; }
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  border: 1px solid var(--border);
+  align-self: start;
+}
+.stat-box {
+  background: var(--gray1);
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Bungee', sans-serif;
+  font-size: 2.5rem;
+  color: var(--orange);
+  display: block;
+}
+.stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 0.3rem;
+  display: block;
+}
+.about-cta {
+  display: inline-block;
+  margin-top: 2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--orange);
+  text-decoration: none;
+  border-bottom: 1px solid var(--orange);
+  padding-bottom: 0.2rem;
+  letter-spacing: 0.1em;
+  cursor: none;
+}
+
+/* PROCESS */
+#process {
+  background: var(--gray1);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.process-inner { max-width: 1100px; margin: 0 auto; }
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--border);
+}
+.process-step {
+  background: var(--gray2);
+  padding: 2.5rem 2rem;
+  position: relative;
+  transition: background 0.2s;
+}
+.process-step:hover { background: #202020; }
+.step-num {
+  font-family: 'Bungee', sans-serif;
+  font-size: 3rem;
+  color: rgba(255,77,0,0.15);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+.process-step h3 {
+  font-family: 'Bungee', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.8rem;
+}
+.process-step p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.step-arrow {
+  position: absolute;
+  top: 2.5rem; right: 1.5rem;
+  color: var(--orange);
+  font-size: 1rem;
+}
+
+/* CTA BANNER */
+.cta-banner {
+  background: var(--orange);
+  padding: 5rem 2.5rem;
+  text-align: center;
+}
+.cta-banner h2 {
+  font-family: 'Bungee', sans-serif;
+  font-size: clamp(2rem, 6vw, 5rem);
+  color: var(--black);
+  line-height: 0.95;
+  margin-bottom: 1rem;
+}
+.cta-banner p {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 1rem;
+  color: rgba(0,0,0,0.7);
+  margin-bottom: 2.5rem;
+}
+.btn-dark {
+  background: var(--black); color: var(--white);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 1rem 2.5rem;
+  text-decoration: none;
+  transition: background 0.2s;
+  cursor: none;
+}
+.btn-dark:hover { background: #1a1a1a; }
+
+/* CONTACT */
+#contact { max-width: 900px; margin: 0 auto; }
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+}
+.contact-info { display: flex; flex-direction: column; gap: 2rem; }
+.contact-item {}
+.contact-item label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+.contact-item a, .contact-item span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  color: var(--white);
+  text-decoration: none;
+}
+.contact-item a:hover { color: var(--orange); }
+.availability-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  background: #22c55e;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  animation: pulse 2s infinite;
+}
+.contact-form { display: flex; flex-direction: column; gap: 1rem; }
+.contact-form input,
+.contact-form textarea {
+  background: var(--gray1);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.9rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: none;
+}
+.contact-form input:focus,
+.contact-form textarea:focus { border-color: var(--orange); }
+.contact-form textarea { height: 120px; }
+.contact-form button {
+  background: var(--orange); color: var(--black);
+  border: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 1rem;
+  cursor: none;
+  font-weight: 700;
+  transition: opacity 0.2s;
+}
+.contact-form button:hover { opacity: 0.85; }
+
+/* FOOTER */
+footer {
+  background: var(--gray1);
+  border-top: 1px solid var(--border);
+  padding: 2.5rem;
+  display: flex;
+  align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-logo {
+  font-family: 'Bungee', sans-serif;
+  font-size: 1rem;
+  color: var(--white);
+}
+.footer-logo span { color: var(--orange); }
+.footer-links { display: flex; gap: 2rem; list-style: none; }
+.footer-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--white); }
+.footer-copy {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* REVEAL ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(20px); }
+}
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+  50% { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+}
+@keyframes floatHero {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.2rem; }
+  .nav-links { display: none; }
+  .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+  section { padding: 4rem 1.2rem; }
+  .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
+}
+```
+
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR -->
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- KONAMI OVERLAY -->
+
+  <div class="konami-overlay" id="konamiOverlay">
+    <h2>YOU<br>FOUND<br>IT 🥷</h2>
+    <p>Konami Code activé · RLMB Studio · Secret unlocked</p>
+    <div class="hint">↑ ↑ ↓ ↓ ← → ← → B A</div>
+    <button class="konami-close" id="konamiClose">Fermer ×</button>
+  </div>
+
+  <!-- MINI GAME -->
+
+<button class="minigame-btn" id="minigameBtn">R</button>
+
+  <div class="minigame-panel" id="minigamePanel">
+    <h4>// Mini Game</h4>
+    <p>Clique le plus vite possible en 5 secondes. Prouve que tu mérites de travailler avec nous.</p>
+    <div class="minigame-score" id="mgScore">0</div>
+    <div class="minigame-record" id="mgRecord">Clics · Record : 0</div>
+    <button class="minigame-start" id="mgStart">START →</button>
+  </div>
+
+  <!-- NAV -->
+
+  <nav>
+    <a href="#hero" class="nav-logo" id="navLogo">RLMB<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Let's Talk →</a>
+  </nav>
+
+  <!-- HERO -->
+
+  <section id="hero">
+    <div class="hero-bg-letter">RLMB</div>
+    <div class="hero-phase">Est. 2026 · Belgium · Europe</div>
+    <h1 class="hero-title" id="heroTitle">
+      WE BUILD<br><span class="line2">BRANDS.</span>
+    </h1>
+    <p class="hero-sub">
+      Branding, content, design & digital pour les marques qui veulent qu'on les remarque. Pas de générique. Juste de l'impact.
+    </p>
+    <div class="hero-btns">
+      <a href="#work" class="btn-primary">Voir notre work →</a>
+      <a href="#contact" class="btn-outline">Démarrer un projet</a>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+
+  <div class="marquee-section">
+    <div class="marquee-track" id="marqueeTrack">
+      <div class="marquee-item">Branding</div>
+      <div class="marquee-item">Content Creation</div>
+      <div class="marquee-item">Social Media</div>
+      <div class="marquee-item">Print Design</div>
+      <div class="marquee-item">Web Design</div>
+      <div class="marquee-item">Events</div>
+      <div class="marquee-item">Sport</div>
+      <div class="marquee-item">Lifestyle</div>
+      <div class="marquee-item">Wellness</div>
+      <div class="marquee-item">Fashion</div>
+      <div class="marquee-item">Music</div>
+      <div class="marquee-item">Food & Beverage</div>
+      <div class="marquee-item">Culture</div>
+      <div class="marquee-item">Belgium & Europe</div>
+      <!-- duplicate for seamless loop -->
+      <div class="marquee-item">Branding</div>
+      <div class="marquee-item">Content Creation</div>
+      <div class="marquee-item">Social Media</div>
+      <div class="marquee-item">Print Design</div>
+      <div class="marquee-item">Web Design</div>
+      <div class="marquee-item">Events</div>
+      <div class="marquee-item">Sport</div>
+      <div class="marquee-item">Lifestyle</div>
+      <div class="marquee-item">Wellness</div>
+      <div class="marquee-item">Fashion</div>
+      <div class="marquee-item">Music</div>
+      <div class="marquee-item">Food & Beverage</div>
+      <div class="marquee-item">Culture</div>
+      <div class="marquee-item">Belgium & Europe</div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+
+  <section id="services">
+    <div class="section-label">Phase 02</div>
+    <h2 class="section-title reveal">CE QU'ON<br>FAIT.</h2>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <div class="service-icon">◼</div>
+        <h3>Branding</h3>
+        <p>Identité visuelle complète — logo, charte graphique, guidelines. La fondation de toute marque sérieuse.</p>
+        <a href="#contact" class="service-link">Explorer →</a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">02</div>
+        <div class="service-icon">◈</div>
+        <h3>Content</h3>
+        <p>Visuels IG, Reels, carrousels, captions. Du contenu cohérent qui arrête le scroll.</p>
+        <a href="#contact" class="service-link">Explorer →</a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">03</div>
+        <div class="service-icon">▲</div>
+        <h3>Print</h3>
+        <p>Affiches, flyers, lookbooks, supports événementiels. Du design qui s'imprime et qui claque.</p>
+        <a href="#contact" class="service-link">Explorer →</a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">04</div>
+        <div class="service-icon">◉</div>
+        <h3>Social Media</h3>
+        <p>Stratégie éditoriale, planning, gestion de compte. On pilote votre présence en ligne.</p>
+        <a href="#contact" class="service-link">Explorer →</a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">05</div>
+        <div class="service-icon">⬡</div>
+        <h3>Web Design</h3>
+        <p>Sites vitrines, landing pages, portfolios. On conçoit et développe votre présence digitale de A à Z.</p>
+        <a href="#contact" class="service-link">Explorer →</a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">06</div>
+        <div class="service-icon">◎</div>
+        <h3>Events</h3>
+        <p>Direction créative, activation de marque, identité visuelle événementielle.</p>
+        <a href="#contact" class="service-link">Explorer →</a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">07</div>
+        <div class="service-icon">◇</div>
+        <h3>Consulting</h3>
+        <p>Audit de marque, recommandations stratégiques. Pour les marques qui veulent progresser vite.</p>
+        <a href="#contact" class="service-link">Explorer →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+
+  <section id="work">
+    <div class="work-inner">
+      <div class="section-label">Phase 03</div>
+      <h2 class="section-title reveal">NOTRE<br>WORK.</h2>
+      <div class="work-note reveal">
+        // Portfolio en construction — projets à venir. Contacte-nous pour en discuter.
+      </div>
+      <div class="work-grid">
+
+```
+    <!-- Card 1 -->
+    <div class="work-card reveal">
+      <div class="work-img" id="img1-zone">
+        <div class="work-img-placeholder">R</div>
+        <div class="work-img-label">// IMAGE À VENIR</div>
+        <div class="upload-hint">
+          <span>+ AJOUTER IMAGE</span>
+        </div>
+        <input type="file" accept="image/*" onchange="loadImg(this,'img1-zone')">
+      </div>
+      <div class="work-info">
+        <div class="work-tags">
+          <span class="work-tag accent">Branding</span>
+          <span class="work-tag">Sport</span>
+        </div>
+        <h3>Brand Identity — Sport Co.</h3>
+        <p>Identité visuelle complète pour une marque sport émergente. Logo, charte, templates.</p>
+        <a href="#contact" class="work-btn">Discuter ce projet →</a>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="work-card reveal">
+      <div class="work-img" id="img2-zone">
+        <div class="work-img-placeholder">L</div>
+        <div class="work-img-label">// IMAGE À VENIR</div>
+        <div class="upload-hint"><span>+ AJOUTER IMAGE</span></div>
+        <input type="file" accept="image/*" onchange="loadImg(this,'img2-zone')">
+      </div>
+      <div class="work-info">
+        <div class="work-tags">
+          <span class="work-tag accent">Content</span>
+          <span class="work-tag">Wellness</span>
+        </div>
+        <h3>Content Strategy — Wellness Brand</h3>
+        <p>Planning éditorial + production de contenu IG sur 3 mois.</p>
+        <a href="#contact" class="work-btn">Discuter ce projet →</a>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="work-card reveal">
+      <div class="work-img" id="img3-zone">
+        <div class="work-img-placeholder">M</div>
+        <div class="work-img-label">// IMAGE À VENIR</div>
+        <div class="upload-hint"><span>+ AJOUTER IMAGE</span></div>
+        <input type="file" accept="image/*" onchange="loadImg(this,'img3-zone')">
+      </div>
+      <div class="work-info">
+        <div class="work-tags">
+          <span class="work-tag accent">Print</span>
+          <span class="work-tag">Events</span>
+        </div>
+        <h3>Event Identity — Brand Launch</h3>
+        <p>Identité visuelle complète pour un événement de lancement à Bruxelles.</p>
+        <a href="#contact" class="work-btn">Discuter ce projet →</a>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="work-card reveal">
+      <div class="work-img" id="img4-zone">
+        <div class="work-img-placeholder">B</div>
+        <div class="work-img-label">// IMAGE À VENIR</div>
+        <div class="upload-hint"><span>+ AJOUTER IMAGE</span></div>
+        <input type="file" accept="image/*" onchange="loadImg(this,'img4-zone')">
+      </div>
+      <div class="work-info">
+        <div class="work-tags">
+          <span class="work-tag accent">Social Media</span>
+          <span class="work-tag">Lifestyle</span>
+        </div>
+        <h3>Social Strategy — Lifestyle Co.</h3>
+        <p>Refonte complète de la présence sociale d'une marque lifestyle.</p>
+        <a href="#contact" class="work-btn">Discuter ce projet →</a>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="work-card reveal">
+      <div class="work-img" id="img5-zone">
+        <div class="work-img-placeholder">R</div>
+        <div class="work-img-label">// IMAGE À VENIR</div>
+        <div class="upload-hint"><span>+ AJOUTER IMAGE</span></div>
+        <input type="file" accept="image/*" onchange="loadImg(this,'img5-zone')">
+      </div>
+      <div class="work-info">
+        <div class="work-tags">
+          <span class="work-tag accent">Web Design</span>
+          <span class="work-tag">Fashion</span>
+        </div>
+        <h3>Site Vitrine — Fashion Brand</h3>
+        <p>Conception et développement d'un site vitrine pour une marque fashion émergente.</p>
+        <a href="#contact" class="work-btn">Discuter ce projet →</a>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="work-card reveal">
+      <div class="work-img" id="img6-zone">
+        <div class="work-img-placeholder">L</div>
+        <div class="work-img-label">// IMAGE À VENIR</div>
+        <div class="upload-hint"><span>+ AJOUTER IMAGE</span></div>
+        <input type="file" accept="image/*" onchange="loadImg(this,'img6-zone')">
+      </div>
+      <div class="work-info">
+        <div class="work-tags">
+          <span class="work-tag accent">Branding</span>
+          <span class="work-tag">Music</span>
+        </div>
+        <h3>Visual Identity — Music Artist</h3>
+        <p>Identité visuelle complète pour un artiste musical — logo, merch, assets digitaux.</p>
+        <a href="#contact" class="work-btn">Discuter ce projet →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+```
+
+  </section>
+
+  <!-- ABOUT -->
+
+  <section id="about">
+    <div class="section-label">Phase 04</div>
+    <h2 class="section-title reveal">QUI<br>SOMMES<br>NOUS.</h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          RLMB Studio est une <strong>agence créative & marketing indépendante</strong> basée en Belgique. On intervient sur tous les secteurs — sport, lifestyle, wellness, fashion, music, food & beverage, culture.
+        </p>
+        <p>
+          On ne fait pas du contenu générique. On construit des <strong>identités fortes</strong> pour des marques qui veulent se démarquer — avec du design brut, de la stratégie solide et une exécution sans compromis.
+        </p>
+        <p>
+          Du branding au web design, en passant par la gestion des réseaux et l'activation événementielle — on s'occupe de tout.
+        </p>
+        <a href="#contact" class="about-cta">Travailler avec nous →</a>
+      </div>
+      <div class="about-stats reveal">
+        <div class="stat-box">
+          <span class="stat-num">10+</span>
+          <span class="stat-label">Projets</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">3</span>
+          <span class="stat-label">Pays</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">48h</span>
+          <span class="stat-label">Délai moyen</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">26</span>
+          <span class="stat-label">Est. 2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+
+  <section id="process">
+    <div class="process-inner">
+      <div class="section-label">Phase 05</div>
+      <h2 class="section-title reveal">COMMENT<br>ON BOSSE.</h2>
+      <div class="process-steps">
+        <div class="process-step reveal">
+          <div class="step-num">01</div>
+          <span class="step-arrow">→</span>
+          <h3>Brief & Discovery</h3>
+          <p>On prend le temps de comprendre votre marque, vos objectifs et votre audience. 30 min suffit.</p>
+        </div>
+        <div class="process-step reveal">
+          <div class="step-num">02</div>
+          <span class="step-arrow">→</span>
+          <h3>Stratégie & Concept</h3>
+          <p>On pose une direction créative claire avant de produire quoi que ce soit. Zéro improvisation.</p>
+        </div>
+        <div class="process-step reveal">
+          <div class="step-num">03</div>
+          <span class="step-arrow">→</span>
+          <h3>Création & Production</h3>
+          <p>On produit vite et bien. Délai moyen de 48h à 5 jours selon la complexité du projet.</p>
+        </div>
+        <div class="process-step reveal">
+          <div class="step-num">04</div>
+          <span class="step-arrow">✓</span>
+          <h3>Livraison & Suivi</h3>
+          <p>Livraison propre, feedback intégré, suivi des résultats. On ne disparaît pas après livraison.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+
+  <div class="cta-banner">
+    <h2>PRÊT À<br>LANCER ?</h2>
+    <p>On répond en moins de 24h. Pas de devis interminable. Juste une conversation honnête.</p>
+    <a href="#contact" class="btn-dark">Démarrer maintenant →</a>
+  </div>
+
+  <!-- CONTACT -->
+
+  <section id="contact">
+    <div class="section-label">Phase 06</div>
+    <h2 class="section-title reveal">PARLONS<br>PROJET.</h2>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="contact-item">
+          <label>Email</label>
+          <a href="mailto:rlmbstudio@gmail.com">rlmbstudio@gmail.com</a>
+        </div>
+        <div class="contact-item">
+          <label>Instagram</label>
+          <a href="https://instagram.com/rlmb_studio" target="_blank">@rlmb_studio</a>
+        </div>
+        <div class="contact-item">
+          <label>Localisation</label>
+          <span>Belgique & Europe</span>
+        </div>
+        <div class="contact-item">
+          <label>Disponibilité</label>
+          <span><span class="availability-dot"></span>Ouvert aux projets</span>
+        </div>
+        <div class="contact-item">
+          <label>Réponse</label>
+          <span>Sous 24h</span>
+        </div>
+      </div>
+      <div class="contact-form reveal">
+        <input type="text" placeholder="Votre nom" />
+        <input type="email" placeholder="Votre email" />
+        <input type="text" placeholder="Votre projet en une ligne" />
+        <textarea placeholder="Dites-nous en plus..."></textarea>
+        <button onclick="handleContact()">Envoyer le message →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer>
+    <div class="footer-logo">RLMB<span> STUDIO</span></div>
+    <ul class="footer-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 RLMB Studio · Belgium</div>
+  </footer>
+
+  <script>
+    // CURSOR
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+    });
+    function animRing() {
+      rx += (mx - rx - 18) * 0.12;
+      ry += (my - ry - 18) * 0.12;
+      ring.style.transform = `translate(${rx}px, ${ry}px)`;
+      requestAnimationFrame(animRing);
+    }
+    animRing();
+    document.querySelectorAll('a, button, input, textarea, .work-img').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+      el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+    });
+
+    // SCROLL REVEAL
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // KONAMI CODE
+    const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let ki = 0;
+    document.addEventListener('keydown', e => {
+      if (e.key === konamiSeq[ki]) { ki++; if (ki === konamiSeq.length) { document.getElementById('konamiOverlay').classList.add('active'); ki = 0; } }
+      else ki = 0;
+    });
+    document.getElementById('konamiClose').addEventListener('click', () => document.getElementById('konamiOverlay').classList.remove('active'));
+
+    // HERO TITLE EASTER EGG
+    let clickCount = 0;
+    document.getElementById('heroTitle').addEventListener('click', () => {
+      clickCount++;
+      if (clickCount >= 10) {
+        document.getElementById('heroTitle').style.color = 'var(--orange)';
+        setTimeout(() => { document.getElementById('heroTitle').style.color = ''; clickCount = 0; }, 1500);
+      }
+    });
+
+    // MINI GAME
+    const mgBtn = document.getElementById('minigameBtn');
+    const mgPanel = document.getElementById('minigamePanel');
+    const mgScore = document.getElementById('mgScore');
+    const mgRecord = document.getElementById('mgRecord');
+    const mgStart = document.getElementById('mgStart');
+    let record = 0, score = 0, running = false;
+    mgBtn.addEventListener('click', () => mgPanel.classList.toggle('active'));
+    mgStart.addEventListener('click', () => {
+      if (running) return;
+      score = 0; mgScore.textContent = '0'; running = true;
+      mgStart.textContent = 'GO!';
+      mgPanel.addEventListener('click', countClick);
+      setTimeout(() => {
+        running = false;
+        mgPanel.removeEventListener('click', countClick);
+        if (score > record) { record = score; }
+        mgRecord.textContent = `Clics · Record : ${record}`;
+        mgStart.textContent = 'START →';
+      }, 5000);
+    });
+    function countClick() { if (running) { score++; mgScore.textContent = score; } }
+
+    // CONTACT FORM
+    function handleContact() {
+      const btn = document.querySelector('.contact-form button');
+      btn.textContent = '✓ Message envoyé !';
+      btn.style.background = '#22c55e';
+      setTimeout(() => { btn.textContent = 'Envoyer le message →'; btn.style.background = ''; }, 3000);
+    }
+
+    // IMAGE UPLOAD
+    function loadImg(input, zoneId) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        const zone = document.getElementById(zoneId);
+        zone.style.backgroundImage = `url(${e.target.result})`;
+        zone.style.backgroundSize = 'cover';
+        zone.style.backgroundPosition = 'center';
+        zone.querySelector('.work-img-placeholder').style.display = 'none';
+        zone.querySelector('.work-img-label').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // NAV LOGO HOVER EASTER EGG
+    document.getElementById('navLogo').addEventListener('mouseenter', function() {
+      this.style.letterSpacing = '0.15em';
+      this.style.transition = 'letter-spacing 0.3s ease';
+    });
+    document.getElementById('navLogo').addEventListener('mouseleave', function() {
+      this.style.letterSpacing = '';
+    });
+  </script>
+
+</body>
+</html>
