@@ -24,7 +24,6 @@
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-```
 html { scroll-behavior: smooth; }
 
 body {
@@ -39,7 +38,7 @@ body {
 }
 
 /* CURSOR — desktop only */
-.cursor, .cursor-ring { display: none; }
+.cursor, .cursor-ring, .cursor-label { display: none; }
 @media (pointer: fine) {
   .cursor {
     display: block;
@@ -65,6 +64,18 @@ body {
   }
   .cursor.hover { transform: scale(2.5); }
   .cursor-ring.hover { width: 60px; height: 60px; opacity: 0.3; }
+  .cursor-label {
+    display: block;
+    position: fixed; top: 0; left: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.1em;
+    color: var(--black); background: var(--orange);
+    padding: 0.3rem 0.6rem;
+    pointer-events: none; z-index: 99997;
+    opacity: 0; transform-origin: top left;
+    transition: opacity 0.15s ease;
+  }
+  .cursor-label.show { opacity: 1; }
 }
 
 /* KONAMI OVERLAY */
@@ -150,6 +161,12 @@ nav {
   text-decoration: none;
   letter-spacing: 0.05em;
   cursor: none;
+}
+.nav-logo .mark {
+  color: var(--black);
+  -webkit-text-stroke: 1px var(--orange);
+  text-stroke: 1px var(--orange);
+  paint-order: stroke fill;
 }
 .nav-logo span { color: var(--orange); }
 .nav-links { display: flex; gap: 2rem; list-style: none; }
@@ -318,10 +335,23 @@ section { padding: 6rem 2.5rem; }
   line-height: 0.95;
   letter-spacing: -0.01em;
   margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+.phase-watermark {
+  position: absolute;
+  top: -2.2rem; right: 0;
+  font-family: 'Bungee Shade', 'Bungee', sans-serif;
+  font-size: clamp(5rem, 15vw, 12rem);
+  color: rgba(255,77,0,0.05);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
 }
 
 /* SERVICES */
-#services { background: var(--black); max-width: 1200px; margin: 0 auto; }
+#services { background: var(--black); max-width: 1200px; margin: 0 auto; position: relative; overflow: hidden; }
 .services-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -373,126 +403,117 @@ section { padding: 6rem 2.5rem; }
   cursor: none;
 }
 
-/* WORK */
+/* WORK — poster wall, not a SaaS grid */
 #work {
   background: var(--gray1);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  position: relative;
 }
-.work-inner { max-width: 1200px; margin: 0 auto; }
+.work-inner { max-width: 1200px; margin: 0 auto; position: relative; }
 .work-note {
   font-family: 'Space Mono', monospace;
   font-size: 0.65rem;
   color: var(--muted);
   letter-spacing: 0.1em;
-  margin-bottom: 3rem;
+  margin-bottom: 3.5rem;
   border-left: 2px solid var(--orange);
   padding-left: 1rem;
+  max-width: 46ch;
+  line-height: 1.7;
 }
-.work-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1px;
-  border: 1px solid var(--border);
-}
-.work-card {
-  background: var(--gray2);
-  overflow: hidden;
-  position: relative;
-  transition: background 0.2s;
-}
-.work-card:hover { background: #1f1f1f; }
-.work-img {
-  width: 100%; aspect-ratio: 4/3;
-  background: var(--black);
-  display: flex; align-items: center; justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-.work-img-placeholder {
-  font-family: 'Bungee', sans-serif;
-  font-size: clamp(4rem, 8vw, 7rem);
-  color: rgba(255,77,0,0.08);
-  user-select: none;
-}
-.work-img-label {
-  position: absolute;
-  bottom: 1rem; left: 1rem;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--muted);
-  background: rgba(8,8,8,0.7);
-  padding: 0.3rem 0.6rem;
-  letter-spacing: 0.1em;
-}
-/* Image upload zone */
-.work-img input[type="file"] {
-  position: absolute; inset: 0;
-  opacity: 0; cursor: none;
-  width: 100%; height: 100%;
-  z-index: 10;
-}
-.work-img:hover .upload-hint { opacity: 1; }
-.upload-hint {
-  position: absolute;
-  inset: 0;
-  background: rgba(255,77,0,0.08);
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 0.4rem;
-  opacity: 0;
-  transition: opacity 0.2s;
-  pointer-events: none;
-}
-.upload-hint span {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--orange);
-  letter-spacing: 0.15em;
-}
-.work-info { padding: 1.5rem; }
-.work-tags {
-  display: flex; gap: 0.5rem; flex-wrap: wrap;
-  margin-bottom: 0.8rem;
-}
-.work-tag {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.55rem;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  padding: 0.2rem 0.5rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.work-tag.accent { border-color: var(--orange); color: var(--orange); }
-.work-card h3 {
-  font-family: 'Bungee', sans-serif;
-  font-size: 1rem;
-  letter-spacing: 0.02em;
-  margin-bottom: 0.5rem;
-}
-.work-card p {
-  font-size: 0.82rem;
-  color: var(--muted);
-  line-height: 1.6;
-  margin-bottom: 1.2rem;
-}
-.work-btn {
-  display: inline-block;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--white);
-  border: 1px solid var(--border);
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.work-filters { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2.5rem; }
+.work-filter {
+  background: none; border: 1px solid var(--border); color: var(--muted);
+  font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 0.55rem 1rem; cursor: none;
   transition: border-color 0.2s, color 0.2s;
-  cursor: none;
 }
-.work-btn:hover { border-color: var(--orange); color: var(--orange); }
+.work-filter:hover { color: var(--white); }
+.work-filter.active { border-color: var(--orange); color: var(--orange); }
+.work-wall {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.4rem;
+}
+.work-piece {
+  cursor: none;
+  position: relative;
+  transition: transform 0.35s ease;
+}
+.work-piece:nth-child(6n+1) { grid-column: span 3; transform: rotate(-1.1deg); }
+.work-piece:nth-child(6n+2) { grid-column: span 3; transform: rotate(0.8deg); margin-top: 2.5rem; }
+.work-piece:nth-child(6n+3) { grid-column: span 2; transform: rotate(1.3deg); }
+.work-piece:nth-child(6n+4) { grid-column: span 2; transform: rotate(-0.6deg); margin-top: 1.5rem; }
+.work-piece:nth-child(6n+5) { grid-column: span 2; transform: rotate(-1.4deg); }
+.work-piece.is-hidden { display: none; }
+.work-piece:hover { transform: rotate(0deg) translateY(-6px); z-index: 5; }
+.work-frame {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  background: var(--black);
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+}
+.work-frame img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: saturate(0.94) contrast(1.02);
+  transition: transform 0.5s ease;
+}
+.work-piece:hover .work-frame img { transform: scale(1.045); }
+.work-spec {
+  position: absolute; top: 0.7rem; left: 0.7rem;
+  font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em;
+  background: rgba(8,8,8,0.78); color: var(--orange);
+  border: 1px solid rgba(255,77,0,0.4); padding: 0.25rem 0.5rem;
+}
+.work-cap {
+  padding: 0.9rem 0.1rem 0;
+}
+.work-cap .cat {
+  display: block; font-family: 'Space Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem;
+}
+.work-cap .ttl {
+  font-family: 'Bungee', sans-serif; font-size: 0.85rem; letter-spacing: 0.01em;
+}
+@media (max-width: 900px) {
+  .work-wall { grid-template-columns: repeat(2, 1fr); }
+  .work-piece, .work-piece:nth-child(6n+1), .work-piece:nth-child(6n+2), .work-piece:nth-child(6n+3), .work-piece:nth-child(6n+4), .work-piece:nth-child(6n+5) {
+    grid-column: span 1; transform: none; margin-top: 0;
+  }
+}
+@media (max-width: 520px) {
+  .work-wall { grid-template-columns: 1fr; }
+}
+
+/* WORK LIGHTBOX */
+.work-lightbox {
+  position: fixed; inset: 0; z-index: 20000;
+  background: rgba(6,6,6,0.95);
+  display: none; align-items: center; justify-content: center;
+  padding: clamp(16px, 5vw, 56px);
+}
+.work-lightbox.open { display: flex; }
+.wl-figure { max-width: min(90vw, 780px); max-height: 86vh; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.wl-figure img { max-width: 100%; max-height: 72vh; width: auto; border: 1px solid var(--border); background: #000; }
+.wl-cap { text-align: center; }
+.wl-cap .cat { display: block; font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.wl-cap .ttl { font-family: 'Bungee', sans-serif; font-size: 1.05rem; }
+.wl-brief { max-width: 52ch; font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin-top: 4px; }
+.wl-close, .wl-prev, .wl-next {
+  position: fixed; background: none; border: 1px solid var(--border); color: var(--white);
+  font-family: 'Space Mono', monospace; cursor: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.wl-close:hover, .wl-prev:hover, .wl-next:hover { border-color: var(--orange); color: var(--orange); }
+.wl-close { top: 20px; right: 20px; width: 40px; height: 40px; font-size: 1.1rem; }
+.wl-prev, .wl-next { top: 50%; transform: translateY(-50%); width: 44px; height: 44px; font-size: 1.3rem; }
+.wl-prev { left: 16px; } .wl-next { right: 16px; }
 
 /* ABOUT */
-#about { max-width: 1100px; margin: 0 auto; }
+#about { max-width: 1100px; margin: 0 auto; position: relative; overflow: hidden; }
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -551,8 +572,9 @@ section { padding: 6rem 2.5rem; }
   background: var(--gray1);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  overflow: hidden;
 }
-.process-inner { max-width: 1100px; margin: 0 auto; }
+.process-inner { max-width: 1100px; margin: 0 auto; position: relative; }
 .process-steps {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -622,9 +644,15 @@ section { padding: 6rem 2.5rem; }
   cursor: none;
 }
 .btn-dark:hover { background: #1a1a1a; }
+.torn-edge {
+  display: block;
+  width: 100%; height: 22px;
+  margin-top: -1px;
+}
+.torn-edge path { fill: var(--orange); }
 
 /* CONTACT */
-#contact { max-width: 900px; margin: 0 auto; }
+#contact { max-width: 900px; margin: 0 auto; position: relative; overflow: hidden; }
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -698,6 +726,11 @@ footer {
   font-family: 'Bungee', sans-serif;
   font-size: 1rem;
   color: var(--white);
+}
+.footer-logo .mark {
+  color: var(--black);
+  -webkit-text-stroke: 1px var(--orange);
+  paint-order: stroke fill;
 }
 .footer-logo span { color: var(--orange); }
 .footer-links { display: flex; gap: 2rem; list-style: none; }
@@ -822,86 +855,111 @@ footer {
 }
 .social-link:hover { border-color: var(--orange); color: var(--orange); }
 
-/* TESTIMONIAL */
-.testimonial-section {
+/* OFFER — pricing, broken out of the grid rhythm */
+#offer { max-width: 1200px; margin: 0 auto; position: relative; overflow: hidden; }
+.offer-note {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 3.5rem;
+  border-left: 2px solid var(--orange);
+  padding-left: 1rem;
+  max-width: 46ch;
+  line-height: 1.7;
+}
+.offer-plans {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  gap: 1.4rem;
+  align-items: stretch;
+}
+.offer-plan {
+  background: var(--gray1);
+  border: 1px solid var(--border);
+  padding: 2.2rem 1.8rem;
+  display: flex; flex-direction: column; gap: 1.2rem;
+  position: relative;
+}
+.offer-plan.featured {
+  background: var(--gray2);
+  border-color: var(--orange);
+  transform: translateY(-14px);
+}
+.offer-plan.featured::before {
+  content: 'RECOMMANDÉ';
+  position: absolute; top: 0; right: 0;
+  background: var(--orange); color: var(--black);
+  font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em;
+  padding: 0.35rem 0.7rem;
+}
+.offer-name { font-family: 'Bungee', sans-serif; font-size: 1.25rem; }
+.offer-for { font-size: 0.8rem; color: var(--muted); margin-top: -0.6rem; line-height: 1.5; }
+.offer-price {
+  font-family: 'Bungee Shade', 'Bungee', sans-serif;
+  font-size: 2.1rem; color: var(--white);
+  display: flex; align-items: baseline; gap: 0.5rem;
+}
+.offer-price small { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.offer-plan ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; font-size: 0.85rem; color: #cfc9bd; flex: 1; }
+.offer-plan li { padding-left: 1.1rem; position: relative; }
+.offer-plan li::before { content: '→'; position: absolute; left: 0; top: 0; color: var(--orange); font-size: 0.85em; }
+.offer-foot { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 0.9rem; }
+.offer-addons {
+  margin-top: 3rem; border: 1px solid var(--border); padding: 1.8rem 1.6rem;
+  display: flex; flex-wrap: wrap; gap: 1.2rem 2.4rem;
+}
+.offer-addons-label { width: 100%; font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.offer-addon { font-size: 0.85rem; display: flex; gap: 0.6rem; align-items: baseline; }
+.offer-addon b { font-weight: 500; }
+.offer-addon span { color: var(--orange); font-family: 'Space Mono', monospace; font-size: 0.8rem; }
+@media (max-width: 900px) {
+  .offer-plans { grid-template-columns: 1fr; }
+  .offer-plan.featured { transform: none; }
+}
+
+/* REFORGE — content-series teaser */
+#reforge {
   background: var(--gray1);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  padding: 4rem 2.5rem;
+  overflow: hidden;
 }
-.testimonial-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+.reforge-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+.reforge-layout { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 3rem; align-items: center; }
+.reforge-text p { font-size: 0.95rem; color: var(--muted); line-height: 1.8; margin-bottom: 1.2rem; }
+.reforge-text p strong { color: var(--white); font-weight: 500; }
+.reforge-tag {
+  display: inline-block; font-family: 'Space Mono', monospace; font-size: 0.65rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange);
+  border: 1px solid var(--orange); padding: 0.4rem 0.8rem; margin-bottom: 1.2rem;
 }
-.testimonial-card {
-  background: var(--gray2);
-  border: 1px solid var(--border);
-  padding: 2rem;
-  position: relative;
-}
-.testimonial-card::before {
-  content: '"';
-  font-family: 'Bungee', sans-serif;
-  font-size: 5rem;
-  color: rgba(255,77,0,0.15);
-  position: absolute;
-  top: -0.5rem;
-  left: 1.2rem;
-  line-height: 1;
-}
-.testimonial-text {
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 300;
-  font-size: 0.9rem;
-  color: var(--white);
-  line-height: 1.7;
-  margin-bottom: 1.5rem;
-  margin-top: 1rem;
-}
-.testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-.testimonial-avatar {
-  width: 36px; height: 36px;
-  background: var(--orange);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Bungee', sans-serif;
-  font-size: 0.85rem;
-  color: var(--black);
-  flex-shrink: 0;
-}
-.testimonial-name {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--white);
-  letter-spacing: 0.1em;
-  display: block;
-}
-.testimonial-role {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.55rem;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  display: block;
-  margin-top: 0.2rem;
-}
-.testimonial-stars {
-  color: var(--orange);
-  font-size: 0.7rem;
-  margin-bottom: 0.5rem;
+.reforge-cards { display: flex; flex-direction: column; gap: 1px; border: 1px solid var(--border); }
+.reforge-card { background: var(--gray2); padding: 1.4rem 1.6rem; display: flex; gap: 1.2rem; align-items: baseline; }
+.reforge-num { font-family: 'Bungee Shade', 'Bungee', sans-serif; font-size: 1.6rem; color: rgba(255,77,0,0.35); flex-shrink: 0; }
+.reforge-card-body b { font-family: 'Bungee', sans-serif; font-size: 0.95rem; display: block; margin-bottom: 0.4rem; font-weight: 400; }
+.reforge-card-body span { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+@media (max-width: 860px) {
+  .reforge-layout { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
-  .testimonial-inner { grid-template-columns: 1fr; }
   .hamburger { display: flex; }
   .nav-links { display: none; }
   .nav-cta { display: none; }
 }
-```
+
+/* GRAIN + BRAND MARK */
+.grain-overlay {
+  position: fixed; inset: 0; z-index: 1;
+  pointer-events: none; opacity: 0.5; mix-blend-mode: overlay;
+  background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 3px),
+                     repeating-linear-gradient(90deg, rgba(255,255,255,0.015) 0 1px, transparent 1px 3px);
+}
+.hero-arcs {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(140vw, 1400px); height: min(140vw, 1400px);
+  pointer-events: none; opacity: 0.5;
+}
 
   </style>
 </head>
@@ -911,6 +969,8 @@ footer {
 
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor-label" id="cursorLabel">VOIR →</div>
+  <div class="grain-overlay" aria-hidden="true"></div>
 
   <!-- KONAMI OVERLAY -->
 
@@ -936,20 +996,19 @@ footer {
   <!-- NAV -->
 
   <nav>
-    <a href="#hero" class="nav-logo" id="navLogo">RLMB<span>.</span></a>
+    <a href="#hero" class="nav-logo" id="navLogo"><span class="mark">RLMB</span><span>.</span></a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
-
-```
-  <li><a href="#about">About</a></li>
-  <li><a href="#process">Process</a></li>
-  <li><a href="#contact">Contact</a></li>
-</ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#offer">Offer</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
 <a href="#contact" class="nav-cta">Let's Talk →</a>
 <button class="hamburger" id="hamburger" aria-label="Menu">
   <span></span><span></span><span></span>
 </button>
-```
 
   </nav>
 
@@ -957,19 +1016,24 @@ footer {
 
   <div class="mobile-menu" id="mobileMenu">
     <a href="#services" onclick="closeMenu()">Services</a>
-
-```
-<a href="#about" onclick="closeMenu()">About</a>
-<a href="#process" onclick="closeMenu()">Process</a>
-<a href="#contact" onclick="closeMenu()">Contact</a>
-<a href="#contact" class="mob-cta" onclick="closeMenu()">Let's Talk →</a>
-```
+    <a href="#work" onclick="closeMenu()">Work</a>
+    <a href="#offer" onclick="closeMenu()">Offer</a>
+    <a href="#about" onclick="closeMenu()">About</a>
+    <a href="#process" onclick="closeMenu()">Process</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+    <a href="#contact" class="mob-cta" onclick="closeMenu()">Let's Talk →</a>
 
   </div>
 
   <!-- HERO -->
 
   <section id="hero">
+    <svg class="hero-arcs" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(255,77,0,0.08)" stroke-width="0.6"/>
+      <circle cx="100" cy="100" r="78" fill="none" stroke="rgba(242,237,230,0.05)" stroke-width="0.6"/>
+      <path d="M 100 4 A 96 96 0 0 1 196 100" fill="none" stroke="rgba(255,77,0,0.22)" stroke-width="1.2"/>
+      <path d="M 4 100 A 96 96 0 0 1 60 12" fill="none" stroke="rgba(242,237,230,0.1)" stroke-width="1.2"/>
+    </svg>
     <div class="hero-bg-letter">RLMB</div>
     <div class="hero-phase">Est. 2026 · Belgium · Europe</div>
     <h1 class="hero-title" id="heroTitle">
@@ -1026,6 +1090,7 @@ footer {
   <!-- SERVICES -->
 
   <section id="services">
+    <div class="phase-watermark" aria-hidden="true">02</div>
     <div class="section-label">Phase 02</div>
     <h2 class="section-title reveal">CE QU'ON<br>FAIT.</h2>
     <div class="services-grid">
@@ -1088,10 +1153,149 @@ footer {
     </div>
   </section>
 
+  <!-- WORK -->
+
+  <section id="work">
+    <div class="work-inner">
+      <div class="phase-watermark" aria-hidden="true">03</div>
+    <div class="section-label">Phase 03</div>
+      <h2 class="section-title reveal">CE QU'ON<br>A FAIT.</h2>
+      <p class="work-note reveal">Projets personnels et pièces concept du book — la direction artistique qui vend le reste de cette page. Non commandités par les marques citées.</p>
+
+      <div class="work-filters reveal">
+        <button class="work-filter active" data-filter="all">Tous</button>
+        <button class="work-filter" data-filter="affiche">Affiche & événementiel</button>
+        <button class="work-filter" data-filter="identite">Identité de marque</button>
+        <button class="work-filter" data-filter="direction">Direction artistique</button>
+      </div>
+
+      <div class="work-wall reveal" id="workWall">
+        <div class="work-piece" data-cat="affiche" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/dour-digital.jpg" alt="Dour Festival — affiche digitale" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Affiche & événementiel</span>
+            <span class="ttl">Dour Festival — affiche digitale</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="direction" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/salomon-xt6.jpg" alt="Salomon XT-6 — campagne concept" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Direction artistique</span>
+            <span class="ttl">Salomon XT-6 — campagne concept</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="identite" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/washed-logotype.jpg" alt="WASHED. — exploration logotype" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Identité de marque</span>
+            <span class="ttl">WASHED. — exploration logotype</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="direction" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/arcteryx.jpg" alt="Arc'teryx — campagne concept" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Direction artistique</span>
+            <span class="ttl">Arc'teryx — campagne concept</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="direction" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/oakley-plantaris.jpg" alt="Oakley Plantaris — campagne concept" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Direction artistique</span>
+            <span class="ttl">Oakley Plantaris — campagne concept</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="affiche" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/dour-film.jpg" alt="Dour Festival — ciné-poster" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Affiche & événementiel</span>
+            <span class="ttl">Dour Festival — ciné-poster</span>
+          </div>
+        </div>
+      </div>
+      <p class="work-note reveal" style="margin-top:2.5rem; margin-bottom:0; border-left-color: var(--muted);">SPEC = projet self-initiated, hors mandat client — affiché pour montrer la patte RLMB, pas une collaboration officielle.</p>
+    </div>
+  </section>
+
+  <!-- OFFER -->
+
+  <section id="offer">
+    <div class="phase-watermark" aria-hidden="true">04</div>
+    <div class="section-label">Phase 04</div>
+    <h2 class="section-title reveal">CE QUE<br>ÇA COÛTE.</h2>
+    <p class="offer-note reveal">Trois façons de travailler ensemble — d'un coup de neuf ponctuel à une présence social media qui tourne toute seule.</p>
+
+    <div class="offer-plans reveal">
+      <div class="offer-plan">
+        <div class="offer-name">Identité</div>
+        <div class="offer-for">Marque qui démarre ou se refait une santé visuelle</div>
+        <div class="offer-price">1 400 € <small>forfait</small></div>
+        <ul>
+          <li>Logo + système d'identité (couleurs, typo, textures)</li>
+          <li>Mini brand book (PDF, façon guide interne)</li>
+          <li>Kit de templates de base — posts + stories</li>
+          <li>Livraison en 2 à 3 semaines</li>
+        </ul>
+        <div class="offer-foot">1 aller-retour de révisions inclus</div>
+      </div>
+      <div class="offer-plan featured">
+        <div class="offer-name">Croissance</div>
+        <div class="offer-for">Marque qui a une identité, veut du contenu qui sort chaque semaine</div>
+        <div class="offer-price">750 € <small>/ mois</small></div>
+        <ul>
+          <li>12 visuels/mois déclinés du kit de templates</li>
+          <li>1 carrousel éducatif par mois</li>
+          <li>Calendrier éditorial mensuel fourni</li>
+          <li>1 point stratégie mensuel (30 min)</li>
+        </ul>
+        <div class="offer-foot">Engagement 3 mois minimum</div>
+      </div>
+      <div class="offer-plan">
+        <div class="offer-name">Studio Partner</div>
+        <div class="offer-for">Marque prête à avoir son propre personnage récurrent</div>
+        <div class="offer-price">1 800 € <small>/ mois</small></div>
+        <ul>
+          <li>Tout Croissance, inclus</li>
+          <li>Gestion complète du compte (community mgmt)</li>
+          <li>Série type « Reforge » dédiée à la marque</li>
+          <li>Reporting mensuel + ajustement de stratégie</li>
+        </ul>
+        <div class="offer-foot">Engagement 3 mois minimum</div>
+      </div>
+    </div>
+
+    <div class="offer-addons reveal">
+      <div class="offer-addons-label">// À la carte</div>
+      <div class="offer-addon"><b>Affiche / visuel unique</b> <span>180 €</span></div>
+      <div class="offer-addon"><b>Carrousel (5–8 slides)</b> <span>280 €</span></div>
+      <div class="offer-addon"><b>Kit de templates Canva complet</b> <span>450 €</span></div>
+      <div class="offer-addon"><b>Logo seul (identité express)</b> <span>600 €</span></div>
+    </div>
+  </section>
+
   <!-- ABOUT -->
 
   <section id="about">
-    <div class="section-label">Phase 04</div>
+    <div class="phase-watermark" aria-hidden="true">05</div>
+    <div class="section-label">Phase 05</div>
     <h2 class="section-title reveal">QUI<br>SOMMES<br>NOUS.</h2>
     <div class="about-grid">
       <div class="about-text reveal">
@@ -1131,7 +1335,8 @@ footer {
 
   <section id="process">
     <div class="process-inner">
-      <div class="section-label">Phase 05</div>
+      <div class="phase-watermark" aria-hidden="true">06</div>
+    <div class="section-label">Phase 06</div>
       <h2 class="section-title reveal">COMMENT<br>ON BOSSE.</h2>
       <div class="process-steps">
         <div class="process-step reveal">
@@ -1162,6 +1367,47 @@ footer {
     </div>
   </section>
 
+  <!-- REFORGE -->
+
+  <section id="reforge">
+    <div class="reforge-inner">
+      <div class="phase-watermark" aria-hidden="true">07</div>
+    <div class="section-label">Phase 07</div>
+      <h2 class="section-title reveal">ON REFORGE<br>DES LOGOS.</h2>
+      <div class="reforge-layout">
+        <div class="reforge-text reveal">
+          <span class="reforge-tag">RLMB Reforge</span>
+          <p>Une série récurrente : on prend une marque connue et on montre comment on aurait <strong>réinventé son identité</strong>, façon planche d'exploration de logos.</p>
+          <p>Pas un pitch commercial — un exercice de style qu'on publie chaque semaine sur Instagram, pour montrer la patte RLMB sur des marques que tout le monde connaît déjà.</p>
+          <a href="https://instagram.com/rlmb_studio" target="_blank" class="about-cta">Voir la série sur Instagram →</a>
+        </div>
+        <div class="reforge-cards reveal">
+          <div class="reforge-card">
+            <div class="reforge-num">01</div>
+            <div class="reforge-card-body">
+              <b>Salomon XT-6</b>
+              <span>L'identité outdoor/technique redessinée dans un langage street plus brut.</span>
+            </div>
+          </div>
+          <div class="reforge-card">
+            <div class="reforge-num">02</div>
+            <div class="reforge-card-body">
+              <b>Arc'teryx</b>
+              <span>Minimalisme technique confronté au linework épais et à l'orange RLMB.</span>
+            </div>
+          </div>
+          <div class="reforge-card">
+            <div class="reforge-num">03</div>
+            <div class="reforge-card-body">
+              <b>Oakley</b>
+              <span>Identité sport/lunettes réarmée avec un logo plus agressif.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA BANNER -->
 
   <div class="cta-banner">
@@ -1170,10 +1416,15 @@ footer {
     <a href="#contact" class="btn-dark">Démarrer maintenant →</a>
   </div>
 
+  <svg class="torn-edge" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,0 L0,40 L40,0 L80,40 L120,0 L160,40 L200,0 L240,40 L280,0 L320,40 L360,0 L400,40 L440,0 L480,40 L520,0 L560,40 L600,0 L640,40 L680,0 L720,40 L760,0 L800,40 L840,0 L880,40 L920,0 L960,40 L1000,0 L1040,40 L1080,0 L1120,40 L1160,0 L1200,40 L1200,0 Z"></path>
+  </svg>
+
   <!-- CONTACT -->
 
   <section id="contact">
-    <div class="section-label">Phase 06</div>
+    <div class="phase-watermark" aria-hidden="true">08</div>
+    <div class="section-label">Phase 08</div>
     <h2 class="section-title reveal">PARLONS<br>PROJET.</h2>
     <div class="contact-grid">
       <div class="contact-info reveal">
@@ -1222,14 +1473,14 @@ footer {
   <!-- FOOTER -->
 
   <footer>
-    <div class="footer-logo">RLMB<span> STUDIO</span></div>
+    <div class="footer-logo"><span class="mark">RLMB</span><span> STUDIO</span></div>
     <ul class="footer-links">
       <li><a href="#services">Services</a></li>
-
-```
-  <li><a href="#about">About</a></li>
-  <li><a href="#contact">Contact</a></li>
-</ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#offer">Offer</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
 <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.8rem;">
   <div class="social-links">
     <a href="https://instagram.com/rlmb_studio" target="_blank" class="social-link" title="Instagram">IG</a>
@@ -1238,9 +1489,23 @@ footer {
   </div>
   <div class="footer-copy">© 2026 RLMB Studio · Belgium</div>
 </div>
-```
 
   </footer>
+
+  <!-- WORK LIGHTBOX -->
+
+  <div class="work-lightbox" id="workLightbox">
+    <button class="wl-close" id="wlClose" aria-label="Fermer">✕</button>
+    <button class="wl-prev" id="wlPrev" aria-label="Précédent">‹</button>
+    <figure class="wl-figure">
+      <img id="wlImg" src="" alt="">
+      <figcaption class="wl-cap">
+        <span class="cat" id="wlCat"></span>
+        <span class="ttl" id="wlTtl"></span>
+      </figcaption>
+    </figure>
+    <button class="wl-next" id="wlNext" aria-label="Suivant">›</button>
+  </div>
 
   <script>
     // CURSOR
@@ -1250,6 +1515,7 @@ footer {
     document.addEventListener('mousemove', e => {
       mx = e.clientX; my = e.clientY;
       cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+      cursorLabel.style.transform = `translate(${mx + 22}px, ${my + 14}px)`;
     });
     function animRing() {
       rx += (mx - rx - 18) * 0.12;
@@ -1258,9 +1524,16 @@ footer {
       requestAnimationFrame(animRing);
     }
     animRing();
-    document.querySelectorAll('a, button, input, textarea, .work-img').forEach(el => {
+    document.querySelectorAll('a, button, input, textarea, .work-piece').forEach(el => {
       el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
       el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+    });
+
+    // CURSOR LABEL — "VOIR →" over work pieces
+    const cursorLabel = document.getElementById('cursorLabel');
+    document.querySelectorAll('.work-piece').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorLabel.classList.add('show'));
+      el.addEventListener('mouseleave', () => cursorLabel.classList.remove('show'));
     });
 
     // SCROLL REVEAL
@@ -1363,6 +1636,55 @@ footer {
     });
     document.getElementById('navLogo').addEventListener('mouseleave', function() {
       this.style.letterSpacing = '';
+    });
+
+    // WORK FILTERS
+    const workFilters = document.querySelectorAll('.work-filter');
+    const workPieces = document.querySelectorAll('.work-piece');
+    workFilters.forEach(btn => {
+      btn.addEventListener('click', () => {
+        workFilters.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        workPieces.forEach(p => {
+          p.classList.toggle('is-hidden', f !== 'all' && p.dataset.cat !== f);
+        });
+      });
+    });
+
+    // WORK LIGHTBOX
+    const wl = document.getElementById('workLightbox');
+    const wlImg = document.getElementById('wlImg');
+    const wlCat = document.getElementById('wlCat');
+    const wlTtl = document.getElementById('wlTtl');
+    const workList = Array.from(workPieces);
+    let wlIndex = 0;
+
+    function wlRender() {
+      const piece = workList[wlIndex];
+      wlImg.src = piece.querySelector('img').src;
+      wlImg.alt = piece.querySelector('img').alt;
+      wlCat.textContent = piece.querySelector('.cat').textContent;
+      wlTtl.textContent = piece.querySelector('.ttl').textContent;
+    }
+    function wlOpen(i) { wlIndex = i; wlRender(); wl.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function wlClose() { wl.classList.remove('open'); document.body.style.overflow = ''; }
+    function wlNext() { wlIndex = (wlIndex + 1) % workList.length; wlRender(); }
+    function wlPrev() { wlIndex = (wlIndex - 1 + workList.length) % workList.length; wlRender(); }
+
+    workList.forEach((piece, i) => {
+      piece.addEventListener('click', () => wlOpen(i));
+      piece.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); wlOpen(i); } });
+    });
+    document.getElementById('wlClose').addEventListener('click', wlClose);
+    document.getElementById('wlNext').addEventListener('click', wlNext);
+    document.getElementById('wlPrev').addEventListener('click', wlPrev);
+    wl.addEventListener('click', e => { if (e.target === wl) wlClose(); });
+    document.addEventListener('keydown', e => {
+      if (!wl.classList.contains('open')) return;
+      if (e.key === 'Escape') wlClose();
+      if (e.key === 'ArrowRight') wlNext();
+      if (e.key === 'ArrowLeft') wlPrev();
     });
   </script>
 
