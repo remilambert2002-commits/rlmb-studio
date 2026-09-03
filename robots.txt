@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rlmb-studio.vercel.app/sitemap.xml
