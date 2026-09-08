@@ -1352,7 +1352,7 @@ footer {
           <span class="stat-label">Pays</span>
         </div>
         <div class="stat-box">
-          <span class="stat-num">48h</span>
+          <span class="stat-num" style="font-size:1.9rem;">48h–5j</span>
           <span class="stat-label">Délai moyen</span>
         </div>
         <div class="stat-box">
@@ -1492,6 +1492,7 @@ footer {
       </div>
       <div class="contact-form reveal">
         <form action="https://formspree.io/f/xlgzoazl" method="POST" onsubmit="handleContact(event)">
+          <input type="hidden" name="_next" value="https://rlmb-studio.vercel.app/merci.html" />
           <input type="text" name="name" placeholder="Votre nom" required />
           <input type="email" name="email" placeholder="Votre email" required />
           <input type="text" name="project" placeholder="Votre projet en une ligne" />
@@ -1638,6 +1639,8 @@ footer {
           btn.textContent = '✓ Message envoyé !';
           btn.style.background = '#22c55e';
           form.reset();
+          window.location.href = '/merci.html';
+          return;
         } else {
           btn.textContent = '✗ Erreur — réessaie';
           btn.style.background = '#ef4444';
