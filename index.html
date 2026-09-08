@@ -31,6 +31,8 @@
     "name": "RLMB Studio",
     "description": "Agence créative & marketing indépendante — branding, content, web design, photo, social media & events.",
     "url": "https://rlmb-studio.vercel.app/",
+    "logo": "https://rlmb-studio.vercel.app/img/logo.png",
+    "image": "https://rlmb-studio.vercel.app/img/og-image.jpg",
     "email": "rlmbstudio@gmail.com",
     "areaServed": ["Belgique", "Europe"],
     "address": {
@@ -186,20 +188,12 @@ nav {
   border-bottom: 1px solid var(--border);
 }
 .nav-logo {
-  font-family: 'Bungee', sans-serif;
-  font-size: 1.1rem;
-  color: var(--white);
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  letter-spacing: 0.05em;
   cursor: none;
 }
-.nav-logo .mark {
-  color: var(--black);
-  -webkit-text-stroke: 1px var(--orange);
-  text-stroke: 1px var(--orange);
-  paint-order: stroke fill;
-}
-.nav-logo span { color: var(--orange); }
+.nav-logo-img { height: 30px; width: auto; display: block; }
 .nav-links { display: flex; gap: 2rem; list-style: none; }
 .nav-links a {
   font-family: 'Space Mono', monospace;
@@ -753,17 +747,8 @@ footer {
   align-items: center; justify-content: space-between;
   flex-wrap: wrap; gap: 1rem;
 }
-.footer-logo {
-  font-family: 'Bungee', sans-serif;
-  font-size: 1rem;
-  color: var(--white);
-}
-.footer-logo .mark {
-  color: var(--black);
-  -webkit-text-stroke: 1px var(--orange);
-  paint-order: stroke fill;
-}
-.footer-logo span { color: var(--orange); }
+.footer-logo { display: flex; }
+.footer-logo-img { height: 34px; width: auto; display: block; }
 .footer-links { display: flex; gap: 2rem; list-style: none; }
 .footer-links a {
   font-family: 'Space Mono', monospace;
@@ -1028,7 +1013,7 @@ footer {
   <!-- NAV -->
 
   <nav>
-    <a href="#hero" class="nav-logo" id="navLogo"><span class="mark">RLMB</span><span>.</span></a>
+    <a href="#hero" class="nav-logo" id="navLogo"><img src="/img/logo.png" alt="RLMB Studio" class="nav-logo-img"></a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#work">Work</a></li>
@@ -1506,7 +1491,7 @@ footer {
   <!-- FOOTER -->
 
   <footer>
-    <div class="footer-logo"><span class="mark">RLMB</span><span> STUDIO</span></div>
+    <div class="footer-logo"><img src="/img/logo.png" alt="RLMB Studio" class="footer-logo-img"></div>
     <ul class="footer-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#work">Work</a></li>
@@ -1665,14 +1650,17 @@ footer {
       mobileMenu.classList.remove('open');
     }
 
-    // NAV LOGO HOVER EASTER EGG
-    document.getElementById('navLogo').addEventListener('mouseenter', function() {
-      this.style.letterSpacing = '0.15em';
-      this.style.transition = 'letter-spacing 0.3s ease';
-    });
-    document.getElementById('navLogo').addEventListener('mouseleave', function() {
-      this.style.letterSpacing = '';
-    });
+    // NAV LOGO HOVER EASTER EGG — a little wobble, fits the liquid mark
+    const navLogoImg = document.querySelector('#navLogo .nav-logo-img');
+    if (navLogoImg) {
+      navLogoImg.style.transition = 'transform 0.3s ease';
+      document.getElementById('navLogo').addEventListener('mouseenter', function() {
+        navLogoImg.style.transform = 'scale(1.06) rotate(-2deg)';
+      });
+      document.getElementById('navLogo').addEventListener('mouseleave', function() {
+        navLogoImg.style.transform = '';
+      });
+    }
 
     // WORK FILTERS
     const workFilters = document.querySelectorAll('.work-filter');

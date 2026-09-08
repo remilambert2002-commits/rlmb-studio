@@ -33,8 +33,8 @@
       padding: 1.2rem 2.5rem;
       border-bottom: 1px solid var(--border);
     }
-    .nav-logo { font-family: 'Bungee', sans-serif; font-size: 1.1rem; color: var(--white); text-decoration: none; }
-    .nav-logo span { color: var(--orange); }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 26px; width: auto; display: block; }
     .back-link {
       font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--muted);
       text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase;
@@ -76,7 +76,7 @@
 </head>
 <body>
   <nav>
-    <a href="/" class="nav-logo">RLMB<span>.</span></a>
+    <a href="/" class="nav-logo"><img src="/img/logo.png" alt="RLMB Studio"></a>
     <a href="/" class="back-link">← Retour au site</a>
   </nav>
 
