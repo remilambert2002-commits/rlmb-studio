@@ -459,6 +459,7 @@ section { padding: 6rem 2.5rem; }
 .work-wall {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
+  grid-auto-flow: row dense;
   gap: 1.4rem;
 }
 .work-piece {
@@ -472,6 +473,10 @@ section { padding: 6rem 2.5rem; }
 .work-piece:nth-child(6n+4) { grid-column: span 2; transform: rotate(-0.6deg); margin-top: 1.5rem; }
 .work-piece:nth-child(6n+5) { grid-column: span 2; transform: rotate(-1.4deg); }
 .work-piece.is-hidden { display: none; }
+.work-piece.is-board:nth-child(n) { grid-column: span 3; }
+.work-piece.is-board .work-frame { aspect-ratio: 1/1; }
+.work-piece.is-wide:nth-child(n) { grid-column: span 6; }
+.work-piece.is-wide .work-frame { aspect-ratio: 3/2; }
 .work-piece:hover { transform: rotate(0deg) translateY(-6px); z-index: 5; }
 .work-frame {
   position: relative;
@@ -508,6 +513,8 @@ section { padding: 6rem 2.5rem; }
   .work-piece, .work-piece:nth-child(6n+1), .work-piece:nth-child(6n+2), .work-piece:nth-child(6n+3), .work-piece:nth-child(6n+4), .work-piece:nth-child(6n+5) {
     grid-column: span 1; transform: none; margin-top: 0;
   }
+  .work-piece.is-wide:nth-child(n) { grid-column: span 2; }
+  .work-piece.is-board:nth-child(n) { grid-column: span 1; }
 }
 @media (max-width: 520px) {
   .work-wall { grid-template-columns: 1fr; }
@@ -1177,7 +1184,7 @@ footer {
       <div class="phase-watermark" aria-hidden="true">03</div>
     <div class="section-label">Phase 03</div>
       <h2 class="section-title reveal">CE QU'ON<br>A FAIT.</h2>
-      <p class="work-note reveal">Projets personnels et pièces concept du book — la direction artistique qui vend le reste de cette page. Non commandités par les marques citées.</p>
+      <p class="work-note reveal">Projets personnels, identité RLMB et pièces concept du book — la direction artistique qui vend le reste de cette page. Non commandités par les marques citées.</p>
 
       <div class="work-filters reveal">
         <button class="work-filter active" data-filter="all">Tous</button>
@@ -1245,6 +1252,121 @@ footer {
           <div class="work-cap">
             <span class="cat">Affiche & événementiel</span>
             <span class="ttl">Dour Festival — ciné-poster</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="affiche" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/dour-hazard.jpg" alt="Dour Festival — affiche Hazard" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Affiche & événementiel</span>
+            <span class="ttl">Dour Festival — affiche Hazard</span>
+          </div>
+        </div>
+        <div class="work-piece is-board" data-cat="identite" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/rlmb-logo-system.jpg" alt="RLMB Studio — système de logo" loading="lazy">
+          </div>
+          <div class="work-cap">
+            <span class="cat">Identité de marque</span>
+            <span class="ttl">RLMB Studio — système de logo</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="direction" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/ambush.jpg" alt="Ambush — affiche concept" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Direction artistique</span>
+            <span class="ttl">Ambush — affiche concept</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="affiche" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/dour-heatmap.jpg" alt="Dour Festival — heat map" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Affiche & événementiel</span>
+            <span class="ttl">Dour Festival — heat map</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="identite" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/numb-mascot.jpg" alt="NUMB — mascotte & wordmark" loading="lazy">
+          </div>
+          <div class="work-cap">
+            <span class="cat">Identité de marque</span>
+            <span class="ttl">NUMB — mascotte & wordmark</span>
+          </div>
+        </div>
+        <div class="work-piece is-board" data-cat="identite" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/rlmb-brand-applications.jpg" alt="RLMB Studio — applications de marque" loading="lazy">
+          </div>
+          <div class="work-cap">
+            <span class="cat">Identité de marque</span>
+            <span class="ttl">RLMB Studio — applications de marque</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="affiche" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/dour-eye.jpg" alt="Dour Festival — l'œil" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Affiche & événementiel</span>
+            <span class="ttl">Dour Festival — l'œil</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="direction" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/nike.jpg" alt="Nike — affiche concept" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Direction artistique</span>
+            <span class="ttl">Nike — affiche concept</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="identite" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/rlmb-apparel.jpg" alt="RLMB Studio — apparel" loading="lazy">
+          </div>
+          <div class="work-cap">
+            <span class="cat">Identité de marque</span>
+            <span class="ttl">RLMB Studio — apparel</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="affiche" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/dour-metal.jpg" alt="Dour Festival — line-up metal" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Affiche & événementiel</span>
+            <span class="ttl">Dour Festival — line-up metal</span>
+          </div>
+        </div>
+        <div class="work-piece" data-cat="affiche" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/dour-scream.jpg" alt="Dour Festival — le cri" loading="lazy">
+            <span class="work-spec">SPEC</span>
+          </div>
+          <div class="work-cap">
+            <span class="cat">Affiche & événementiel</span>
+            <span class="ttl">Dour Festival — le cri</span>
+          </div>
+        </div>
+        <div class="work-piece is-wide" data-cat="identite" tabindex="0" role="button">
+          <div class="work-frame">
+            <img src="img/work/rlmb-urban-campaign.jpg" alt="RLMB Studio — campagne urbaine" loading="lazy">
+          </div>
+          <div class="work-cap">
+            <span class="cat">Identité de marque</span>
+            <span class="ttl">RLMB Studio — campagne urbaine</span>
           </div>
         </div>
       </div>
