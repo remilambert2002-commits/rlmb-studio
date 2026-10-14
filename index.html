@@ -919,12 +919,10 @@ footer {
 }
 .offer-name { font-family: 'Bungee', sans-serif; font-size: 1.25rem; }
 .offer-for { font-size: 0.8rem; color: var(--muted); margin-top: -0.6rem; line-height: 1.5; }
-.offer-price {
-  font-family: 'Bungee Shade', 'Bungee', sans-serif;
-  font-size: 2.1rem; color: var(--white);
-  display: flex; align-items: baseline; gap: 0.5rem;
+.offer-format {
+  font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--orange); border: 1px solid rgba(255,77,0,0.4); align-self: flex-start; padding: 0.35rem 0.7rem;
 }
-.offer-price small { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
 .offer-plan ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; font-size: 0.85rem; color: #cfc9bd; flex: 1; }
 .offer-plan li { padding-left: 1.1rem; position: relative; }
 .offer-plan li::before { content: '→'; position: absolute; left: 0; top: 0; color: var(--orange); font-size: 0.85em; }
@@ -936,7 +934,6 @@ footer {
 .offer-addons-label { width: 100%; font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
 .offer-addon { font-size: 0.85rem; display: flex; gap: 0.6rem; align-items: baseline; }
 .offer-addon b { font-weight: 500; }
-.offer-addon span { color: var(--orange); font-family: 'Space Mono', monospace; font-size: 0.8rem; }
 @media (max-width: 900px) {
   .offer-plans { grid-template-columns: 1fr; }
   .offer-plan.featured { transform: none; }
@@ -1379,14 +1376,14 @@ footer {
   <section id="offer">
     <div class="phase-watermark" aria-hidden="true">04</div>
     <div class="section-label">Phase 04</div>
-    <h2 class="section-title reveal">CE QUE<br>ÇA COÛTE.</h2>
-    <p class="offer-note reveal">Trois façons de travailler ensemble — d'un coup de neuf ponctuel à une présence social media qui tourne toute seule.</p>
+    <h2 class="section-title reveal">CE QU'ON<br>PROPOSE.</h2>
+    <p class="offer-note reveal">Trois façons de travailler ensemble — d'un coup de neuf ponctuel à une présence social media qui tourne toute seule. Tarifs sur demande.</p>
 
     <div class="offer-plans reveal">
       <div class="offer-plan">
         <div class="offer-name">Identité</div>
         <div class="offer-for">Marque qui démarre ou se refait une santé visuelle</div>
-        <div class="offer-price">1 400 € <small>forfait</small></div>
+        <div class="offer-format">Forfait</div>
         <ul>
           <li>Logo + système d'identité (couleurs, typo, textures)</li>
           <li>Mini brand book (PDF, façon guide interne)</li>
@@ -1398,7 +1395,7 @@ footer {
       <div class="offer-plan featured">
         <div class="offer-name">Croissance</div>
         <div class="offer-for">Marque qui a une identité, veut du contenu qui sort chaque semaine</div>
-        <div class="offer-price">750 € <small>/ mois</small></div>
+        <div class="offer-format">Abonnement mensuel</div>
         <ul>
           <li>12 visuels/mois déclinés du kit de templates</li>
           <li>1 carrousel éducatif par mois</li>
@@ -1410,7 +1407,7 @@ footer {
       <div class="offer-plan">
         <div class="offer-name">Studio Partner</div>
         <div class="offer-for">Marque prête à avoir son propre personnage récurrent</div>
-        <div class="offer-price">1 800 € <small>/ mois</small></div>
+        <div class="offer-format">Abonnement mensuel</div>
         <ul>
           <li>Tout Croissance, inclus</li>
           <li>Gestion complète du compte (community mgmt)</li>
@@ -1423,10 +1420,10 @@ footer {
 
     <div class="offer-addons reveal">
       <div class="offer-addons-label">// À la carte</div>
-      <div class="offer-addon"><b>Affiche / visuel unique</b> <span>180 €</span></div>
-      <div class="offer-addon"><b>Carrousel (5–8 slides)</b> <span>280 €</span></div>
-      <div class="offer-addon"><b>Kit de templates Canva complet</b> <span>450 €</span></div>
-      <div class="offer-addon"><b>Logo seul (identité express)</b> <span>600 €</span></div>
+      <div class="offer-addon"><b>Affiche / visuel unique</b></div>
+      <div class="offer-addon"><b>Carrousel (5–8 slides)</b></div>
+      <div class="offer-addon"><b>Kit de templates Canva complet</b></div>
+      <div class="offer-addon"><b>Logo seul (identité express)</b></div>
     </div>
   </section>
 
